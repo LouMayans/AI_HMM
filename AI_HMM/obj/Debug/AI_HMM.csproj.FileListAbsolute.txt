@@ -1,0 +1,7 @@
+C:\Users\Lou\Documents\Stuff\School Projects Homework Slides etc\CS Artificial Intelligence\AI_HMM\AI_HMM\bin\Debug\AI_HMM.exe.config
+C:\Users\Lou\Documents\Stuff\School Projects Homework Slides etc\CS Artificial Intelligence\AI_HMM\AI_HMM\bin\Debug\AI_HMM.exe
+C:\Users\Lou\Documents\Stuff\School Projects Homework Slides etc\CS Artificial Intelligence\AI_HMM\AI_HMM\bin\Debug\AI_HMM.pdb
+C:\Users\Lou\Documents\Stuff\School Projects Homework Slides etc\CS Artificial Intelligence\AI_HMM\AI_HMM\obj\Debug\AI_HMM.csprojAssemblyReference.cache
+C:\Users\Lou\Documents\Stuff\School Projects Homework Slides etc\CS Artificial Intelligence\AI_HMM\AI_HMM\obj\Debug\AI_HMM.csproj.CoreCompileInputs.cache
+C:\Users\Lou\Documents\Stuff\School Projects Homework Slides etc\CS Artificial Intelligence\AI_HMM\AI_HMM\obj\Debug\AI_HMM.exe
+C:\Users\Lou\Documents\Stuff\School Projects Homework Slides etc\CS Artificial Intelligence\AI_HMM\AI_HMM\obj\Debug\AI_HMM.pdb
