@@ -47,11 +47,21 @@ namespace AI_HMM
                 showProb = true;
 
             Draw();
+            float rangeMaxInitial = 1f;
             //Asks for the Initial Probability of each element in matrix OR Generates the numbers randomly
             for (int i = 0; i < nodes; i++)
             {
-                if(random)
-                    float.TryParse(((float)(rand.NextDouble())).ToString("0.0"), out initialProbability[i]);
+                if (random)
+                {
+                    if (i == nodes - 1)
+                        initialProbability[i] = rangeMaxInitial;
+                    else
+                    {
+                        float.TryParse((rand.NextDouble() * rangeMaxInitial).ToString("0.0"), out initialProbability[i]);
+                        initialProbability[i] *= (rangeMaxInitial); //makes the range between Max, since columns need to add up to 1.
+                        rangeMaxInitial -= initialProbability[i];
+                    }
+                }
                 else
                 {
                     Console.WriteLine("What is the Initial Probability {0}' probability? (0-1)", i + 1);
@@ -60,31 +70,55 @@ namespace AI_HMM
                 }
             }
             //Asks for the Transition Probability of each element in matrix OR Generates the numbers randomly
-            for (int column = 0; column < nodes; column++)
+            float[] rangeMaxTransition = new float[nodes];
+            for (int i = 0; i < nodes; i++)
+                rangeMaxTransition[i] = 1f;
+
+            for (int row = 0; row < nodes; row++)
             {
-                for (int row = 0; row < nodes; row++)
+                for (int rowIndex = 0; rowIndex < nodes; rowIndex++)
                 {
-                    if(random)
-                        float.TryParse(((float)(rand.NextDouble())).ToString("0.0"), out transitionProbability[column][row]);
+                    if (random)
+                    {
+                        if (row == nodes - 1)
+                            transitionProbability[row][rowIndex] = rangeMaxTransition[rowIndex];
+                        else
+                        {
+                            float.TryParse((rand.NextDouble() * rangeMaxTransition[rowIndex]).ToString("0.0"), out transitionProbability[row][rowIndex]);
+                            rangeMaxTransition[rowIndex] -= transitionProbability[row][rowIndex];
+                        }
+                    }
                     else
                     {
-                        Console.WriteLine("What is the Transition Probability column {0} row {1}' probability? (0-1)", column + 1, row + 1);
-                        float.TryParse(Console.ReadLine(), out transitionProbability[column][row]);
+                        Console.WriteLine("What is the Transition Probability column {0} row {1}' probability? (0-1)", row + 1, rowIndex + 1);
+                        float.TryParse(Console.ReadLine(), out transitionProbability[row][rowIndex]);
                         Draw();
                     }
                 }
             }
+
+            for (int i = 0; i < nodes; i++)
+                rangeMaxTransition[i] = 1f;
             //Asks for the Emission Probability of each element in matrix OR Generates the numbers randomly
-            for (int column = 0; column < nodes; column++)
+            for (int row = 0; row < nodes; row++)
             {
-                for (int row = 0; row < numberOfSequenceSteps; row++)
+                for (int rowIndex = 0; rowIndex < numberOfSequenceSteps; rowIndex++)
                 {
-                    if(random)
-                        float.TryParse(((float)(rand.NextDouble())).ToString("0.0"),out emissionProbability[column][row]);
+                    if (random)
+                    {
+                        if (row == nodes - 1)
+                            emissionProbability[row][rowIndex] = rangeMaxTransition[rowIndex];
+                        else
+                        {
+                            float.TryParse((rand.NextDouble() * rangeMaxTransition[rowIndex]).ToString("0.0"), out emissionProbability[row][rowIndex]);
+                            rangeMaxTransition[rowIndex] -= emissionProbability[row][rowIndex];
+                        }
+                        
+                    }
                     else
                     {
-                        Console.WriteLine("What is the Emission Probability column {0} row {1}' probability? (0-1)", column + 1, row + 1);
-                        float.TryParse(Console.ReadLine(), out emissionProbability[column][row]);
+                        Console.WriteLine("What is the Emission Probability column {0} row {1}' probability? (0-1)", row + 1, rowIndex + 1);
+                        float.TryParse(Console.ReadLine(), out emissionProbability[row][rowIndex]);
                         Draw();
                     }
                 }
