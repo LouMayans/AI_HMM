@@ -14,9 +14,9 @@ namespace AI_HMM
         public int nodes;
         public int numberOfSequenceSteps;
 
-        public float[][] emissionProbability;
-        public float[][] transitionProbability;
-        public float[] initialProbability;
+        public decimal[][] emissionProbability;
+        public decimal[][] transitionProbability;
+        public decimal[] initialProbability;
     }
 
     class Program
@@ -38,17 +38,17 @@ namespace AI_HMM
                 Int32.TryParse(Console.ReadLine(), out hmm.numberOfSequenceSteps);
 
                 //Sets up the emmision array
-                hmm.emissionProbability = new float[hmm.nodes][];
+                hmm.emissionProbability = new decimal[hmm.nodes][];
                 for (int i = 0; i < hmm.emissionProbability.GetLength(0); ++i)
-                    hmm.emissionProbability[i] = new float[hmm.numberOfSequenceSteps];
+                    hmm.emissionProbability[i] = new decimal[hmm.numberOfSequenceSteps];
 
                 //Sets up the transition array
-                hmm.transitionProbability = new float[hmm.nodes][];
+                hmm.transitionProbability = new decimal[hmm.nodes][];
                 for (int i = 0; i < hmm.transitionProbability.GetLength(0); ++i)
-                    hmm.transitionProbability[i] = new float[hmm.nodes];
+                    hmm.transitionProbability[i] = new decimal[hmm.nodes];
 
                 //Sets up the initial array
-                hmm.initialProbability = new float[hmm.nodes];
+                hmm.initialProbability = new decimal[hmm.nodes];
                 
 
                 Console.WriteLine("Do you want the numbers generated randomly(Y/N)?");
@@ -59,6 +59,8 @@ namespace AI_HMM
                 GenerateOrAskInitialProbability(rand, random);
                 GenerateOrAskTransitionProbability(rand, random);
                 GenerateOrAskEmissionProbability(rand, random);
+
+
             }
             else //Gets the valus from  XML file
             {
@@ -86,16 +88,15 @@ namespace AI_HMM
             Draw();
             //ProbabilityPath is an array of tuples where the first value is the sequence of steps and the second value is the probability of that sequence.
             //it instantiates the size to the most probability paths that it can take even the ones it cant take such as 0
-            Tuple<string, float>[] probabilityPath = new Tuple<string, float>[(int)Math.Pow(hmm.nodes, hmm.numberOfSequenceSteps)];
+            Tuple<string, decimal>[] probabilityPath = new Tuple<string, decimal>[(int)Math.Pow(hmm.nodes, hmm.numberOfSequenceSteps)];
             
             //For each probability sequence
             for (int i = 0; i < Math.Pow(hmm.nodes, hmm.numberOfSequenceSteps); i++)
             {
                 
                 //Starts the probability with initial probability of the start sequencearray first index.
-                float probability = hmm.initialProbability[sequenceArray[0]];
+                decimal probability = hmm.initialProbability[sequenceArray[0]];
 
-                //
                 for (int columnEmission = 0; columnEmission < hmm.numberOfSequenceSteps; columnEmission++)
                 {
                     //for each column in the emissionProbability array of the starting sequence index that we are at
@@ -134,7 +135,7 @@ namespace AI_HMM
                         }
 
                         //adds the sequence and the probability path to the array tuple
-                        probabilityPath[i] = new Tuple<string, float>(sequenceString, probability);
+                        probabilityPath[i] = new Tuple<string, decimal>(sequenceString, probability);
                         Console.Write("\n" + sequenceString);
                         Console.Write(": = {0}\n", probability);
                         //goes to the next sequence
@@ -162,9 +163,9 @@ namespace AI_HMM
         {
             //this rangeMaxTransition is used for making sure that when values are getting generated
             //that all transitions will add up to 1
-            float[] rangeMaxTransition = new float[hmm.nodes];
+            decimal[] rangeMaxTransition = new decimal[hmm.nodes];
             for (int i = 0; i < hmm.nodes; i++)
-                rangeMaxTransition[i] = 1f;
+                rangeMaxTransition[i] = 1;
             
             for (int row = 0; row < hmm.nodes; row++)
             {
@@ -180,7 +181,7 @@ namespace AI_HMM
                         //number is getting set to where the decimal precision isnt very long. which is then a string then parsed into the emiisionProbability
                         else
                         {
-                            float.TryParse((rand.NextDouble() * rangeMaxTransition[column]).ToString("0.0"), out hmm.emissionProbability[row][column]);
+                            decimal.TryParse(((decimal)rand.NextDouble() * rangeMaxTransition[column]).ToString("0.0"), out hmm.emissionProbability[row][column]);
                             rangeMaxTransition[column] -= hmm.emissionProbability[row][column];
                         }
 
@@ -188,7 +189,7 @@ namespace AI_HMM
                     else
                     {
                         Console.WriteLine("What is the Emission Probability column {0} row {1}' probability? (0-1)", row + 1, column + 1);
-                        float.TryParse(Console.ReadLine(), out hmm.emissionProbability[row][column]);
+                        decimal.TryParse(Console.ReadLine(), out hmm.emissionProbability[row][column]);
                         Draw();
                     }
                 }
@@ -201,9 +202,9 @@ namespace AI_HMM
         {
             //this rangeMaxTransition is used for making sure that when values are getting generated
             //that all transitions will add up to 1
-            float[] rangeMaxTransition = new float[hmm.nodes];
+            decimal[] rangeMaxTransition = new decimal[hmm.nodes];
             for (int i = 0; i < hmm.nodes; i++)
-                rangeMaxTransition[i] = 1f;
+                rangeMaxTransition[i] = 1;
 
             for (int row = 0; row < hmm.nodes; row++)
             {
@@ -219,14 +220,14 @@ namespace AI_HMM
                         //number is getting set to where the decimal precision isnt very long. which is then a string then parsed into the emiisionProbability
                         else
                         {
-                            float.TryParse((rand.NextDouble() * rangeMaxTransition[column]).ToString("0.0"), out hmm.transitionProbability[row][column]);
+                            decimal.TryParse(((decimal)rand.NextDouble() * rangeMaxTransition[column]).ToString("0.0"), out hmm.transitionProbability[row][column]);
                             rangeMaxTransition[column] -= hmm.transitionProbability[row][column];
                         }
                     }
                     else
                     {
                         Console.WriteLine("What is the Transition Probability column {0} row {1}' probability? (0-1)", row + 1, column + 1);
-                        float.TryParse(Console.ReadLine(), out hmm.transitionProbability[row][column]);
+                        decimal.TryParse(Console.ReadLine(), out hmm.transitionProbability[row][column]);
                         Draw();
                     }
                 }
@@ -237,7 +238,7 @@ namespace AI_HMM
         private static void GenerateOrAskInitialProbability(Random rand, bool random)
         {
             Draw();
-            float rangeMaxInitial = 1f;
+            decimal rangeMaxInitial = 1.0m;
             
             for (int i = 0; i < hmm.nodes; i++)
             {
@@ -250,7 +251,7 @@ namespace AI_HMM
                     //number is getting set to where the decimal precision isnt very long. which is then a string then parsed into the emiisionProbability
                     else
                     {
-                        float.TryParse((rand.NextDouble() * rangeMaxInitial).ToString("0.0"), out hmm.initialProbability[i]);
+                        decimal.TryParse(((decimal)rand.NextDouble() * rangeMaxInitial).ToString("0.0"), out hmm.initialProbability[i]);
                         hmm.initialProbability[i] *= (rangeMaxInitial); //makes the range between Max, since columns need to add up to 1.
                         rangeMaxInitial -= hmm.initialProbability[i];
                     }
@@ -258,7 +259,7 @@ namespace AI_HMM
                 else
                 {
                     Console.WriteLine("What is the Initial Probability {0}' probability? (0-1)", i + 1);
-                    float.TryParse(Console.ReadLine(), out hmm.initialProbability[i]);
+                    decimal.TryParse(Console.ReadLine(), out hmm.initialProbability[i]);
                     Draw();
                 }
             }
